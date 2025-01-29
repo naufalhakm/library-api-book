@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package author;
+
+option go_package = "library-api-book/proto/author";
+
+service AuthorService {
+  rpc DetailAuthor(AuthorRequest) returns (AuthorResponse);
+}
+
+message AuthorRequest {
+  uint64 user_id = 1;
+}
+
+message AuthorResponse {
+  uint64 user_id = 1;
+  string name = 2;
+  string bio = 3;
+}
