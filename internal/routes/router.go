@@ -2,13 +2,10 @@ package routes
 
 import (
 	"fmt"
-	"library-api-book/internal/commons/response"
 	"library-api-book/internal/factory"
 	"library-api-book/internal/grpc/client"
 	"library-api-book/internal/middleware"
-	"library-api-book/pkg/token"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -30,13 +27,15 @@ func RegisterRoutes(provider *factory.Provider, authClient *client.AuthClient) *
 	{
 		v1 := api.Group("v1")
 		{
-			v1.GET("/books", provider.BookProvider.GetAllBooks)
-			v1.GET("/books/:id", provider.BookProvider.GetDetailBook)
 			auth := v1.Use(middleware.CheckAuth(authClient))
-			auth.POST("/books", provider.BookProvider.CreateBook)
-			auth.PUT("/books/:id", provider.BookProvider.UpdateBook)
-			auth.DELETE("/books/id", provider.BookProvider.DeleteBook)
+			auth.GET("/books", provider.BookProvider.GetAllBooks)
+			auth.GET("/books/:id", provider.BookProvider.GetDetailBook)
 			auth.GET("/books/recommendation", provider.BookProvider.GetRecommendationBook)
+
+			admin := v1.Use(middleware.CheckAuthIsAdminOrAuthor(authClient))
+			admin.POST("/books", provider.BookProvider.CreateBook)
+			admin.PUT("/books/:id", provider.BookProvider.UpdateBook)
+			admin.DELETE("/books/id", provider.BookProvider.DeleteBook)
 		}
 	}
 
@@ -52,29 +51,6 @@ func CORS() gin.HandlerFunc {
 		if ctx.Request.Method == "OPTIONS" {
 			ctx.AbortWithStatus(http.StatusNoContent)
 		}
-		ctx.Next()
-	}
-}
-
-func CheckAuth() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		header := ctx.GetHeader("Authorization")
-
-		bearerToken := strings.Split(header, "Bearer ")
-
-		if len(bearerToken) != 2 {
-			resp := response.UnauthorizedErrorWithAdditionalInfo("len token must be 2")
-			ctx.AbortWithStatusJSON(resp.StatusCode, resp)
-			return
-		}
-
-		payload, err := token.ValidateToken(bearerToken[1])
-		if err != nil {
-			resp := response.UnauthorizedErrorWithAdditionalInfo(err.Error())
-			ctx.AbortWithStatusJSON(resp.StatusCode, resp)
-			return
-		}
-		ctx.Set("authId", payload.AuthId)
 		ctx.Next()
 	}
 }
