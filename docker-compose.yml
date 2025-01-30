@@ -16,7 +16,7 @@ services:
   goservices:
     build: "."
     container_name: goservices
-    image: naufalhakm/library-api-book:v1
+    image: naufalhakm/library-api-book:v2
     depends_on:
       - postgres
     environment:
@@ -26,8 +26,8 @@ services:
       DB_PASSWORD: password
       DB_DATABASE: library
     ports:
-      - "8081:8081"  # REST API
-      - "50051:50051"  # gRPC
+      - "8081:8081"
+      - "50051:50051"
     restart: always
 
 volumes:
