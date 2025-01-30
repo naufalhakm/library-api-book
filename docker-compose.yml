@@ -13,5 +13,22 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  goservices:
+    build: "."
+    container_name: goservices
+    image: naufalhakm/library-api-book:v1
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      DB_DATABASE: library
+    ports:
+      - "8081:8081"  # REST API
+      - "50051:50051"  # gRPC
+    restart: always
+
 volumes:
   postgres_data:
