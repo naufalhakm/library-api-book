@@ -13,9 +13,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  goservices_book:
+  goservices-book:
     build: "."
-    container_name: goservices_book
+    container_name: goservices-book
     image: naufalhakm/library-api-book:v2
     depends_on:
       - postgres
