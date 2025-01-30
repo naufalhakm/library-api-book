@@ -22,16 +22,14 @@ type BookService interface {
 }
 
 type BookServiceImpl struct {
-	DB               *sql.DB
-	BookRepository   repositories.BookRepository
-	BorrowRepository repositories.BorrowRepository
+	DB             *sql.DB
+	BookRepository repositories.BookRepository
 }
 
-func NewBookService(db *sql.DB, bookRepository repositories.BookRepository, borrowRepository repositories.BorrowRepository) BookService {
+func NewBookService(db *sql.DB, bookRepository repositories.BookRepository) BookService {
 	return &BookServiceImpl{
-		DB:               db,
-		BookRepository:   bookRepository,
-		BorrowRepository: borrowRepository,
+		DB:             db,
+		BookRepository: bookRepository,
 	}
 }
 

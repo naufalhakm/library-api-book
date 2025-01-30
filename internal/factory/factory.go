@@ -15,9 +15,8 @@ type Provider struct {
 func InitFactory(db *sql.DB) *Provider {
 
 	bookRepo := repositories.NewBookRepository()
-	borrowRepo := repositories.NewBorrowRepository()
 
-	bookService := services.NewBookService(db, bookRepo, borrowRepo)
+	bookService := services.NewBookService(db, bookRepo)
 	bookController := controllers.NewBookController(bookService)
 
 	return &Provider{
