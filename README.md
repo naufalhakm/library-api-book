@@ -86,4 +86,4 @@ This microservice is built using:
 ### Live Server
 
 The microservice is running at:
-http://35.240.139.186:8081/
+http://34.142.158.122:8081/
