@@ -13,6 +13,7 @@ type Config struct {
 	ServerPort     string `mapstructure:"PORT"`
 	GRPCPort       string `mapstructure:"GRPC_PORT"`
 	UserGRPC       string `mapstructure:"USER_GRCP"`
+	Environtment   string `mapstructure:"ENVIRONTMENT"`
 }
 
 var ENV *Config

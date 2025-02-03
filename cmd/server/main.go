@@ -24,7 +24,12 @@ func main() {
 		log.Fatal("Could not connect to PqSQL:", err)
 	}
 
-	provider := factory.InitFactory(psqlDB)
+	redis := database.NewRedisClient()
+	if redis == nil {
+		log.Fatal("Failed connect to redis")
+	}
+
+	provider := factory.InitFactory(psqlDB, redis)
 
 	var wg sync.WaitGroup
 	wg.Add(2)
